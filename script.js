@@ -9,12 +9,17 @@ function createGameBoard() {
       gameBoard[position] = marker;
     }
     if (gameBoard[position] !== null) {
-      return false;
       console.log("This position is already taken");
+      return false;
     }
   };
 
-  return gameBoard;
+  // Function to check if there is a winner
+  const checkWinner = function 
+
+  const getGameBoard = function () {
+    return gameBoard;
+  };
 
   // This game will start as a user vers user game
 }
