@@ -15,7 +15,18 @@ function createGameBoard() {
   };
 
   // Function to check if there is a winner
-  const checkWinner = function 
+  const checkWinner = function () {
+    // check for horizontal 3 in a row
+    if (
+        (gameBoard[0] === gameBoard[1] && gameBoard[1] === gameBoard[2]) || 
+        (gameBaord[3] === gameBoard[4] && gameBoard[4 === gameBoard[5]]) ||
+        (gameBoard[6] === gameBoard[7] && gameBoard[7] === gameBoard[8])
+       )
+       {
+        console.log("There is a winner");
+        return true;
+       }
+  }
 
   const getGameBoard = function () {
     return gameBoard;
