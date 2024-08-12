@@ -6,6 +6,10 @@ function createGameBoard() {
     [0, 0, 0],
   ];
 
+  const getGameBoard = function () {
+    return gameBoard;
+  };
+
   //Function to place a marker on the gameboard
 
   const placeMarker = function (position, marker) {
@@ -24,37 +28,33 @@ function createGameBoard() {
     for (let i = 0; i < 3; i += 1) {
       if (
         (gameBoard[i][0] !== 0 &&
-        gameBoard[i][0] === gameBoard[i][1] &&
-        gameBoard[i][1] === gameBoard[i][2]) ||
-    // check for vertical 3 in a row in first, second and third column
-        (
-      gameBoard[0][i] !== 0 &&
-      gameBoard[0][i] === gameBoard[1][i] &&
-      gameBoard[1][i] === gameBoard[2][i] 
-        ) ||
+          gameBoard[i][0] === gameBoard[i][1] &&
+          gameBoard[i][1] === gameBoard[i][2]) ||
+        // check for vertical 3 in a row in first, second and third column
+        (gameBoard[0][i] !== 0 &&
+          gameBoard[0][i] === gameBoard[1][i] &&
+          gameBoard[1][i] === gameBoard[2][i]) ||
         // check for diagnol 3 in a row;
-        (
-      gameBoard[0][0] !== 0 &&
-      gameBoard[0][0] === gameBoard[1][1] &&
-      gameBoard[1][1] === gameBoard[2][2]
-        ) ||
-        (
-          gameBoard[0][2] !== 0 &&
+        (gameBoard[0][0] !== 0 &&
+          gameBoard[0][0] === gameBoard[1][1] &&
+          gameBoard[1][1] === gameBoard[2][2]) ||
+        (gameBoard[0][2] !== 0 &&
           gameBoard[0][2] === gameBoard[1][1] &&
-          gameBoard[1][1] === gameBoard[2][0]
-        )
-      )
-  
-      {
+          gameBoard[1][1] === gameBoard[2][0])
+      ) {
         console.log("There is a winner");
-        return true;
+        // return win dialog
+        return getGameBoard(); // on event listener click
+        ;
+      } else {
+        console.log("It's a tie");
+        // return tie dialog
+        return getGameBoard(); // on event listener click
+        ;
       }
     }
   };
 
-  const getGameBoard = function () {
-    return gameBoard;
-  };
 
   // This game will start as a user vers user game
 }
