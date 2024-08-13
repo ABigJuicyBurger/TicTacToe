@@ -84,7 +84,7 @@ function gameController(player1) {
 
   // function to keep track of current player
   let currentPlayer = player1;
-  game = createGameBoard();
+  gameBoard = createGameBoard();
 
   const startGame = () => {
     console.log("New game started");
@@ -102,21 +102,28 @@ function gameController(player1) {
     console.log(currentPlayer);
   };
 
-  // function to play game
-  const playTurn = function (position) {
-    const movePosition = prompt("Enter move: 0 - 8");
-    if (game.placeMarker(movePosition, currentPlayer.marker)) {
-      if (game.checkWinner()) {
-        console.log(`${currentPlayer.name} wins!`);
-        return true;
+  // function to play a turn
+  const playTurn = (board) => {
+    let validMove = false;
+    while (!validMove) {
+      const position = prompt(`${currentPlayer.name}, enter a position (0-8):`);
+      if (board.placeMarker(position, currentPlayer.marker)) {
+        validMove = true;
+        console.log(`${currentPlayer.name} placed ${currentPlayer.marker} at position ${position}`);
+        console.log(board.getGameBoard());
+        return board.checkWinner();
+      } 
+      else {
+        console.log("Invalid move");
       }
-      switchPlayer();
     }
-    return false;
   };
 
+  
+  
+
   return {
-    playTurn,
+    playTurn: () => playTurn(gameBoard),
     switchPlayer,
     startGame,
   };
