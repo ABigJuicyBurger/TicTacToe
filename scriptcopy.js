@@ -18,6 +18,7 @@ function createGameBoard() {
 
     if (gameBoard[row][col] === 0) {
       gameBoard[row][col] = marker;
+      getGameBoard();
       return true;
     }
     return false;
@@ -112,7 +113,7 @@ function gameController(player1, player2) {
         console.log(
           `${currentPlayer.name} placed ${currentPlayer.marker} at position ${position}`
         );
-        console.log(board.getGameBoard());
+        console.log(JSON.stringify(gameBoard.getGameBoard(), null, 2));
         return board.checkWinner();
       } else {
         console.log("Invalid move");
@@ -141,6 +142,7 @@ function main() {
     // If there isn't a winner, keep playing
     if (gameResult === null) {
       gameControl.switchPlayer();
+
     }
   }
   if (gameResult === "tie") {
