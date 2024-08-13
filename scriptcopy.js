@@ -91,9 +91,10 @@ function Player() {
 function gameController(player1, player2) {
   // function to start game
 
-  // function to keep track of current player
+  // function to keep track of current player and display board
   let currentPlayer = player1;
   gameBoard = createGameBoard();
+  let display = displayBoard(gameBoard.getGameBoard());
 
   // function to switch players or turns
   const switchPlayer = () => {
@@ -113,7 +114,7 @@ function gameController(player1, player2) {
         console.log(
           `${currentPlayer.name} placed ${currentPlayer.marker} at position ${position}`
         );
-        console.log(JSON.stringify(gameBoard.getGameBoard(), null, 2));
+        display.showBoard();
         return board.checkWinner();
       } else {
         console.log("Invalid move");
@@ -127,11 +128,24 @@ function gameController(player1, player2) {
   };
 }
 
+// factory function to display board (in console for now)
+const displayBoard = (getGameBoard) => {
+
+const formatGameBoard = function (board) {
+    return board.map(row => row.join(' | ')).join('\n---------\n');
+  }
+
+  return {
+    showBoard: () => console.log(formatGameBoard(getGameBoard()))
+  };
+}
+
 function main() {
   const player1 = Player();
   const player2 = Player()
   const gameControl = gameController(player1, player2);
   const board = createGameBoard();
+  const displayBoard = displayBoard(board);
 
   let gameResult = null;
 
