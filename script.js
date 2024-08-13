@@ -1,16 +1,14 @@
 /* Start with the gameboard */
 function createGameBoard() {
-  const gameBoard = [null, null, null, null, null, null, null, null, null];
-  const topLeft = gameBoard[0];
-  const topMiddle = gameBoard[1];
-  const topRight = gameBoard[2];
-  const middleLeft = gameBoard[3];
-  const middleMiddle = gameBoard[4];
-  const middleRight = gameBoard[5];
-  const bottomLeft = gameBoard[6];
-  const bottomMiddle = gameBoard[7];
-  const bottomRight = gameBoard[8];
+  const gameBoard = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ];
 
+  const getGameBoard = function () {
+    return gameBoard;
+  };
 
   //Function to place a marker on the gameboard
 
@@ -26,27 +24,66 @@ function createGameBoard() {
 
   // Function to check if there is a winner
   const checkWinner = function () {
-    // check for horizontal 3 in a row
-    if (
-        (gameBoard[0] === gameBoard[1] && gameBoard[1] === gameBoard[2]) || 
-        (gameBoard[3] === gameBoard[4] && gameBoard[4] === gameBoard[5]) ||
-        (gameBoard[6] === gameBoard[7] && gameBoard[7] === gameBoard[8])
-       )
-       {
+    // check for horizontal 3 in a row in first, second and third row
+    for (let i = 0; i < 3; i += 1) {
+      if (
+        (gameBoard[i][0] !== 0 &&
+          gameBoard[i][0] === gameBoard[i][1] &&
+          gameBoard[i][1] === gameBoard[i][2]) ||
+        // check for vertical 3 in a row in first, second and third column
+        (gameBoard[0][i] !== 0 &&
+          gameBoard[0][i] === gameBoard[1][i] &&
+          gameBoard[1][i] === gameBoard[2][i]) ||
+        // check for diagnol 3 in a row;
+        (gameBoard[0][0] !== 0 &&
+          gameBoard[0][0] === gameBoard[1][1] &&
+          gameBoard[1][1] === gameBoard[2][2]) ||
+        (gameBoard[0][2] !== 0 &&
+          gameBoard[0][2] === gameBoard[1][1] &&
+          gameBoard[1][1] === gameBoard[2][0])
+      ) {
         console.log("There is a winner");
-        return true;
-       }
-    // check for vertical 3 in a row
-    if (
-        (gameBoard[0] === gameBoard[3] && gameBoard[3] === gameBoard[6])||
-        (gameBoard)
-    )
-  }
-
-
-  const getGameBoard = function () {
-    return gameBoard;
+        // return win dialog
+        return getGameBoard(); // on event listener click
+      } else {
+        console.log("It's a tie");
+        // return tie dialog
+        return getGameBoard(); // on event listener click
+      }
+    }
   };
 
   // This game will start as a user vers user game
 }
+
+// function GameBoard() {} work on later
+
+// Player Factory Function
+function Player(name, marker, type) {
+  const name = prompt("Enter name");
+
+  const marker = prompt("Select shape");
+
+  return {
+    name,
+    marker,
+    type,
+  };
+
+  function takeTurn(marker) {}
+}
+
+function main() {
+  // 1. create game board
+  const gameBoard = new GameBoard();
+
+  // 2. create players
+  const playerHuman = new Player(gameBoard);
+  const playerComputer = new Player(gameBoard);
+
+  // playerHuman goes first
+
+  playerHuman.takeTurn();
+}
+
+main();
