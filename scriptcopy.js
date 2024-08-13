@@ -15,47 +15,55 @@ function createGameBoard() {
   const placeMarker = (position, marker) => {
     const row = Math.floor(position / 3);
     const col = position % 3;
-    
+
     if (gameBoard[row][col] === 0) {
-        gameBoard[row][col] = marker;
-        return true;
+      gameBoard[row][col] = marker;
+      return true;
     }
     return false;
-};
+  };
   // Function to check if there is a winner
   const checkWinner = function () {
     // check for horizontal 3 in a row in first, second and third row
     for (let i = 0; i < 3; i += 1) {
-      if 
-        (gameBoard[i][0] !== 0 &&
-          gameBoard[i][0] === gameBoard[i][1] &&
-          gameBoard[i][1] === gameBoard[i][2]) {
-            return gameBoard[i][0];
-          }
-        // check for vertical 3 in a row in first, second and third column
-       if  (gameBoard[0][i] !== 0 &&
-          gameBoard[0][i] === gameBoard[1][i] &&
-          gameBoard[1][i] === gameBoard[2][i]) {
-            return gameBoard[0][i];
-          }
-        // check for diagnol 3 in a row;
-       if (gameBoard[0][0] !== 0 &&
-          gameBoard[0][0] === gameBoard[1][1] &&
-          gameBoard[1][1] === gameBoard[2][2])  {
-            return gameBoard[0][0];
-          }
-      if  (gameBoard[0][2] !== 0 &&
-          gameBoard[0][2] === gameBoard[1][1] &&
-          gameBoard[1][1] === gameBoard[2][0]) {
-            return gameBoard[0][2];
-          }
-      
-      // Check for tie
-      if (gameBoard.flat().every(cell => cell !== 0)) {
-        return 'tie';
+      if (
+        gameBoard[i][0] !== 0 &&
+        gameBoard[i][0] === gameBoard[i][1] &&
+        gameBoard[i][1] === gameBoard[i][2]
+      ) {
+        return gameBoard[i][0];
       }
+      // check for vertical 3 in a row in first, second and third column
+      if (
+        gameBoard[0][i] !== 0 &&
+        gameBoard[0][i] === gameBoard[1][i] &&
+        gameBoard[1][i] === gameBoard[2][i]
+      ) {
+        return gameBoard[0][i];
+      }
+    }
+    // check for diagnol 3 in a row;
+    if (
+      gameBoard[0][0] !== 0 &&
+      gameBoard[0][0] === gameBoard[1][1] &&
+      gameBoard[1][1] === gameBoard[2][2]
+    ) {
+      return gameBoard[0][0];
+    }
+    if (
+      gameBoard[0][2] !== 0 &&
+      gameBoard[0][2] === gameBoard[1][1] &&
+      gameBoard[1][1] === gameBoard[2][0]
+    ) {
+      return gameBoard[0][2];
+    }
 
-      return null; // Game not over yet
+    // Check for tie
+    if (gameBoard.flat().every((cell) => cell !== 0)) {
+      return "tie";
+    }
+
+    return null; // Game not over yet
   };
 
   return {
@@ -71,7 +79,7 @@ function Player() {
 
   const getPlayerMarker = () => prompt("Select shape");
   const marker = getPlayerMarker();
- 
+
   return {
     name,
     marker,
@@ -79,7 +87,7 @@ function Player() {
 }
 
 // function to control the game
-function gameController(player1) {
+function gameController(player1, player2) {
   // function to start game
 
   // function to keep track of current player
@@ -87,14 +95,9 @@ function gameController(player1) {
   gameBoard = createGameBoard();
 
   // function to switch players or turns
-  const switchPlayer = function (currentPlayer) {
-    if (currentPlayer === player1) {
-      currentPlayer = player2;
-    } else {
-      currentPlayer = player1;
-    }
-    console.log(currentPlayer);
-  };
+  const switchPlayer = () => {
+    currentPlayer = currentPlayer === player1 ? player2 : player1;
+  }
 
   // function to play a turn
   const playTurn = (board) => {
@@ -104,14 +107,14 @@ function gameController(player1) {
       // allow player to cancel game
       if (position === null) {
         break;
-      }
-      else if (board.placeMarker(position, currentPlayer.marker)) {
+      } else if (board.placeMarker(position, currentPlayer.marker)) {
         validMove = true;
-        console.log(`${currentPlayer.name} placed ${currentPlayer.marker} at position ${position}`);
+        console.log(
+          `${currentPlayer.name} placed ${currentPlayer.marker} at position ${position}`
+        );
         console.log(board.getGameBoard());
         return board.checkWinner();
-      } 
-      else {
+      } else {
         console.log("Invalid move");
       }
     }
@@ -119,30 +122,32 @@ function gameController(player1) {
 
   return {
     playTurn: () => playTurn(gameBoard),
-    switchPlayer,
+    switchPlayer
   };
 }
 
 function main() {
   const player1 = Player();
-  const gameControl = gameController(player1);
+  const player2 = Player()
+  const gameControl = gameController(player1, player2);
   const board = createGameBoard();
 
-  let gameOver = false;
+  let gameResult = null;
 
   // while game is not over, get current player move, update board, check for win and switch players
-  while (!gameOver) {
-    gameOver = gameControl.playTurn();
-    gameControl.switchPlayer();
-    board.checkWinner();
+  while (gameResult === null) {
+    gameResult = gameControl.playTurn();
 
-    // If there is a winner, end the game
-    if (gameOver) {
-      console.log(`${gameControl.currentPlayer.name} wins!`);
-      break;
+    // If there isn't a winner, keep playing
+    if (gameResult === null) {
+      gameControl.switchPlayer();
     }
   }
-  console.log("Game over!");
+  if (gameResult === "tie") {
+    console.log("It's a tie!");
+  } else {
+    console.log(`${gameResult} wins!`);
+  }
 }
 
 main();
