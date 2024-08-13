@@ -12,16 +12,16 @@ function createGameBoard() {
 
   //Function to place a marker on the gameboard
 
-  const placeMarker = function (position, marker) {
-    if (gameBoard[position] === 0) {
-      gameBoard[position] = marker;
+  const placeMarker = (position, marker) => {
+    const row = Math.floor(position / 3);
+    const col = position % 3;
+    
+    if (gameBoard[row][col] === 0) {
+        gameBoard[row][col] = marker;
+        return true;
     }
-    if (gameBoard[position] !== 0) {
-      console.log("This position is already taken");
-      return false;
-    }
-  };
-
+    return false;
+};
   // Function to check if there is a winner
   const checkWinner = function () {
     // check for horizontal 3 in a row in first, second and third row
@@ -86,12 +86,6 @@ function gameController(player1) {
   let currentPlayer = player1;
   gameBoard = createGameBoard();
 
-  const startGame = () => {
-    console.log("New game started");
-    console.log("Current board:");
-    console.log(game.getGameBoard());
-  };
-
   // function to switch players or turns
   const switchPlayer = function (currentPlayer) {
     if (currentPlayer === player1) {
@@ -125,7 +119,6 @@ function gameController(player1) {
   return {
     playTurn: () => playTurn(gameBoard),
     switchPlayer,
-    startGame,
   };
   //function to start or restart game
 }
@@ -134,7 +127,6 @@ function main() {
   const player1 = Player();
   const gameControl = gameController(player1);
   const board = createGameBoard();
-  gameControl.startGame();
 
   let gameOver = false;
 
@@ -142,7 +134,6 @@ function main() {
   while (!gameOver) {
     gameOver = gameControl.playTurn();
     gameControl.switchPlayer();
-    console.log(board.getGameBoard());
   }
   console.log("Game over!");
 }
