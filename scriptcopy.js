@@ -129,23 +129,21 @@ function gameController(player1, player2) {
 }
 
 // factory function to display board (in console for now)
-const displayBoard = (getGameBoard) => {
-
-const formatGameBoard = function (board) {
-    return board.map(row => row.join(' | ')).join('\n---------\n');
+const displayBoard = (board) => {
+const formatGameBoard =  (gameState) => {
+    return gameState.map(row => row.join(' | ')).join('\n---------\n');
   }
 
   return {
-    showBoard: () => console.log(formatGameBoard(getGameBoard()))
+    showBoard: () => console.log(formatGameBoard(board))
   };
-}
+};
 
 function main() {
   const player1 = Player();
   const player2 = Player()
   const gameControl = gameController(player1, player2);
   const board = createGameBoard();
-  const displayBoard = displayBoard(board);
 
   let gameResult = null;
 
