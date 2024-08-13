@@ -13,10 +13,10 @@ function createGameBoard() {
   //Function to place a marker on the gameboard
 
   const placeMarker = function (position, marker) {
-    if (gameBoard[position] === null) {
+    if (gameBoard[position] === 0) {
       gameBoard[position] = marker;
     }
-    if (gameBoard[position] !== null) {
+    if (gameBoard[position] !== 0) {
       console.log("This position is already taken");
       return false;
     }
@@ -45,53 +45,99 @@ function createGameBoard() {
         console.log("There is a winner");
         // return win dialog
         return getGameBoard(); // on event listener click
-        
       } else {
         console.log("It's a tie");
         // return tie dialog
         return getGameBoard(); // on event listener click
-        
       }
     }
   };
 
-
-  // This game will start as a user vers user game
+  return {
+    getGameBoard,
+    placeMarker,
+    checkWinner,
+  };
 }
-
-// function GameBoard() {} work on later
-
 // Player Factory Function
-function Player(name, marker, type) {
-  const name = () =>
-  prompt("Enter name");
+function Player() {
+  const getUserName = () => prompt("Please enter your name");
+  const name = getUserName();
 
+  const getPlayerMarker = () => prompt("Select shape");
+  const marker = getPlayerMarker();
 
-  const marker = () =>
-  prompt("Select shape");
+  function takeTurn(marker) {
+    gameBoard.placeMarker(marker);
+  }
 
   return {
     name,
     marker,
-    type
+    takeTurn,
   };
-  
-  function takeTurn(marker) {
+}
 
-  }
+// function to control the game
+function gameController(player1) {
+  // function to start game
+
+  // function to keep track of current player
+  let currentPlayer = player1;
+  game = createGameBoard();
+
+  const startGame = () => {
+    console.log("New game started");
+    console.log("Current board:");
+    console.log(game.getGameBoard());
+  };
+
+  // function to switch players or turns
+  const switchPlayer = function (currentPlayer) {
+    if (currentPlayer === player1) {
+      currentPlayer = player2;
+    } else {
+      currentPlayer = player1;
+    }
+    console.log(currentPlayer);
+  };
+
+  // function to play game
+  const playTurn = function (position) {
+    const movePosition = prompt("Enter move: 0 - 8");
+    if (game.placeMarker(movePosition, currentPlayer.marker)) {
+      if (game.checkWinner()) {
+        console.log(`${currentPlayer.name} wins!`);
+        return true;
+      }
+      switchPlayer();
+    }
+    return false;
+  };
+
+  return {
+    playTurn,
+    switchPlayer,
+    startGame,
+  };
+  //function to start or restart game
 }
 
 function main() {
-  // 1. create game board
-  const gameBoard = new GameBoard();
+  const player1 = Player();
+  const gameControl = gameController(player1);
+  const board = createGameBoard();
+  gameControl.startGame();
 
-  // 2. create players
-  const playerHuman = new Player(gameBoard);
-  const playerComputer = new Player(gameBoard);
+  let gameOver = false;
 
-  // playerHuman goes first
-
-  playerHuman.takeTurn();
+  // while game is not over, get current player move, update board, check for win and switch players
+  while (!gameOver) {
+    gameOver = gameControl.playTurn();
+    gameControl.switchPlayer();
+    console.log(board.getGameBoard());
+  }
+  console.log("Game over!");
 }
 
 main();
