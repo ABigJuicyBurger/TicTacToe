@@ -147,6 +147,7 @@ function gameController(player1, player2) {
   };
 
   return {
+    currentPlayer,
     playTurn: () => playTurn(gameBoard),
     switchPlayer,
   };
@@ -177,6 +178,7 @@ function main() {
   }
  
   const gameControl = gameController(player1, player2);
+  const currentPlayer = gameControl.currentPlayer;
   const board = createGameBoard();
 
   let gameResult = null;
@@ -192,8 +194,11 @@ function main() {
   }
   if (gameResult === "tie") {
     console.log("It's a tie!");
+  } else if (gameResult === undefined){
+    console.log("Game cancelled");
   } else {
-    console.log(`${gameResult} wins!`);
+    console.log(`${currentPlayer.name} wins!`);
+
   }
 }
 
