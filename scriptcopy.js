@@ -77,12 +77,33 @@ function createGameBoard() {
 function Player() {
   const getUserName = () => prompt("Please enter your name");
   const name = getUserName();
+
   if (name === null) {
     return null;
   }
 
-  const getPlayerMarker = () => prompt("Select shape");
-  const marker = getPlayerMarker();
+  const getPlayerMarker = () => {
+  const marker = prompt("Select shape");
+  if (marker === null) {
+    return null;
+  }
+  else if (marker.length > 1) {
+    console.log("Please enter only one character");
+    return getPlayerMarker();
+  }
+  else if (marker.length === 0) {
+    console.log("Please enter a character");
+    return getPlayerMarker();
+  }
+  else if (marker.length === 1) {
+    return marker;
+  }
+};
+
+const marker = getPlayerMarker();
+if (marker === null) {
+  return null;
+}
 
   return {
     name,
@@ -148,11 +169,13 @@ function main() {
     console.log("Game cancelled");
     return;
   }
+
   const player2 = Player();
-  if(player2 === null) {
+  if (player2 === null) {
     console.log("Game cancelled");
     return;
   }
+ 
   const gameControl = gameController(player1, player2);
   const board = createGameBoard();
 
