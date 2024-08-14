@@ -77,6 +77,9 @@ function createGameBoard() {
 function Player() {
   const getUserName = () => prompt("Please enter your name");
   const name = getUserName();
+  if (name === null) {
+    return null;
+  }
 
   const getPlayerMarker = () => prompt("Select shape");
   const marker = getPlayerMarker();
@@ -99,7 +102,7 @@ function gameController(player1, player2) {
   // function to switch players or turns
   const switchPlayer = () => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
-  }
+  };
 
   // function to play a turn
   const playTurn = (board) => {
@@ -108,7 +111,7 @@ function gameController(player1, player2) {
       const position = prompt(`${currentPlayer.name}, enter a position (0-8):`);
       // allow player to cancel game
       if (position === null) {
-        break;
+        return;
       } else if (board.placeMarker(position, currentPlayer.marker)) {
         validMove = true;
         console.log(
@@ -124,24 +127,32 @@ function gameController(player1, player2) {
 
   return {
     playTurn: () => playTurn(gameBoard),
-    switchPlayer
+    switchPlayer,
   };
 }
 
 // factory function to display board (in console for now)
 const displayBoard = (board) => {
-const formatGameBoard =  (gameState) => {
-    return gameState.map(row => row.join(' | ')).join('\n---------\n');
-  }
+  const formatGameBoard = (gameState) => {
+    return gameState.map((row) => row.join(" | ")).join("\n---------\n");
+  };
 
   return {
-    showBoard: () => console.log(formatGameBoard(board))
+    showBoard: () => console.log(formatGameBoard(board)),
   };
 };
 
 function main() {
   const player1 = Player();
-  const player2 = Player()
+  if (player1 === null) {
+    console.log("Game cancelled");
+    return;
+  }
+  const player2 = Player();
+  if(player2 === null) {
+    console.log("Game cancelled");
+    return;
+  }
   const gameControl = gameController(player1, player2);
   const board = createGameBoard();
 
@@ -154,7 +165,6 @@ function main() {
     // If there isn't a winner, keep playing
     if (gameResult === null) {
       gameControl.switchPlayer();
-
     }
   }
   if (gameResult === "tie") {
