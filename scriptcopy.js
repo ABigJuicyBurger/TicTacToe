@@ -32,7 +32,7 @@ function createGameBoard() {
         gameBoard[i][0] === gameBoard[i][1] &&
         gameBoard[i][1] === gameBoard[i][2]
       ) {
-        return gameBoard[i][0];
+        return "winner";
       }
       // check for vertical 3 in a row in first, second and third column
       if (
@@ -40,7 +40,7 @@ function createGameBoard() {
         gameBoard[0][i] === gameBoard[1][i] &&
         gameBoard[1][i] === gameBoard[2][i]
       ) {
-        return gameBoard[0][i];
+        return "winner";
       }
     }
     // check for diagnol 3 in a row;
@@ -49,14 +49,14 @@ function createGameBoard() {
       gameBoard[0][0] === gameBoard[1][1] &&
       gameBoard[1][1] === gameBoard[2][2]
     ) {
-      return gameBoard[0][0];
+      return "winner";
     }
     if (
       gameBoard[0][2] !== 0 &&
       gameBoard[0][2] === gameBoard[1][1] &&
       gameBoard[1][1] === gameBoard[2][0]
     ) {
-      return gameBoard[0][2];
+      return "winner";
     }
 
     // Check for tie
@@ -83,27 +83,24 @@ function Player() {
   }
 
   const getPlayerMarker = () => {
-  const marker = prompt("Select shape");
+    const marker = prompt("Select shape");
+    if (marker === null) {
+      return null;
+    } else if (marker.length > 1) {
+      console.log("Please enter only one character");
+      return getPlayerMarker();
+    } else if (marker.length === 0) {
+      console.log("Please enter a character");
+      return getPlayerMarker();
+    } else if (marker.length === 1) {
+      return marker;
+    }
+  };
+
+  const marker = getPlayerMarker();
   if (marker === null) {
     return null;
   }
-  else if (marker.length > 1) {
-    console.log("Please enter only one character");
-    return getPlayerMarker();
-  }
-  else if (marker.length === 0) {
-    console.log("Please enter a character");
-    return getPlayerMarker();
-  }
-  else if (marker.length === 1) {
-    return marker;
-  }
-};
-
-const marker = getPlayerMarker();
-if (marker === null) {
-  return null;
-}
 
   return {
     name,
@@ -119,51 +116,53 @@ function gameController(player1, player2) {
   let currentPlayer = player1;
   gameBoard = createGameBoard();
   let display = displayBoard(gameBoard.getGameBoard());
+  let gridCells = display.cells;
 
   // function to switch players or turns
   const switchPlayer = () => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
   };
 
+  const isGameOver = () => {
+    return (
+      gameBoard.checkWinner() === "winner" || gameBoard.checkWinner() === "tie"
+    );
+  };
+
   // function to play a turn
   const playTurn = (board) => {
-    let validMove = false;
-    while (!validMove) {
-      const position = prompt(`${currentPlayer.name}, enter a position (0-8):`);
-      // allow player to cancel game
-      if (position === null) {
-        return;
-      } else if (board.placeMarker(position, currentPlayer.marker)) {
-        validMove = true;
-        console.log(
-          `${currentPlayer.name} placed ${currentPlayer.marker} at position ${position}`
-        );
-        display.showBoard();
-        return board.checkWinner();
-      } else {
-        console.log("Invalid move");
-      }
-    }
+    gridCells.forEach((cell) => {
+      cell.addEventListener("click", (e) => {
+        if (!isGameOver()) {
+          const position = parseInt(e.target.dataset.index);
+
+          if (board.placeMarker(position, currentPlayer.marker)) {
+            console.log(
+              `${currentPlayer.name} placed ${currentPlayer.marker} at position ${position}`
+            );
+            display.showBoard();
+          }
+          const winner = gameBoard.checkWinner();
+          if (winner) {
+            console.log(`${currentPlayer.name} wins!`);
+            // stop game
+          } else {
+            switchPlayer();
+          }
+        }
+      });
+    });
   };
 
   return {
     currentPlayer,
     playTurn: () => playTurn(gameBoard),
     switchPlayer,
+    isGameOver,
   };
 }
 
-// factory function to display board (in console for now)
-const displayBoard = (board) => {
-  const formatGameBoard = (gameState) => {
-    return gameState.map((row) => row.join(" | ")).join("\n---------\n");
-  };
-
-  return {
-    showBoard: () => console.log(formatGameBoard(board)),
-  };
-};
-
+// Function to start the game and run logic
 function main() {
   const player1 = Player();
   if (player1 === null) {
@@ -176,30 +175,72 @@ function main() {
     console.log("Game cancelled");
     return;
   }
- 
+
   const gameControl = gameController(player1, player2);
   const currentPlayer = gameControl.currentPlayer;
   const board = createGameBoard();
 
-  let gameResult = null;
+  let gameResult = gameControl.isGameOver();
 
   // while game is not over, get current player move, update board, check for win and switch players
-  while (gameResult === null) {
+  while (gameResult === false) {
     gameResult = gameControl.playTurn();
 
     // If there isn't a winner, keep playing
-    if (gameResult === null) {
+    if (gameResult === false) {
       gameControl.switchPlayer();
     }
   }
   if (gameResult === "tie") {
     console.log("It's a tie!");
-  } else if (gameResult === undefined){
+  } else if (gameResult === undefined) {
     console.log("Game cancelled");
   } else {
     console.log(`${currentPlayer.name} wins!`);
-
+    // end game
   }
 }
 
-main();
+// Run the game, now will run using an event listener to listen to the button in html
+
+// factory function to display board (in console for now) and render contents to webpage
+const displayBoard = (board) => {
+  const grid = document.createElement("div");
+  grid.classList.add("game-board");
+  grid.style.cssText =
+    "display:grid, grid-template-columns: repeat(3, 1fr); width: 300px";
+
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement("button");
+    cell.classList.add("cell");
+    cell.dataset.index = i;
+    cell.style.cssText = "width: 100px; height: 100px; font-size: 2em";
+    grid.appendChild(cell);
+  }
+
+  document.body.appendChild(grid);
+
+  const cells = document.querySelectorAll(".cell");
+
+  const updateBoard = () => {
+    cells.forEach((cell, index) => {
+      const row = Math.floor(index / 3);
+      const col = index % 3;
+      cell.textContent = board[row][col] || "";
+    });
+  };
+
+  return {
+    showBoard: updateBoard,
+    cells: cells,
+  };
+};
+
+const startButton = document.createElement("button");
+
+startButton.style.cssText = "background-color: forestgreen";
+startButton.textContent = "Start Tic_Tac_Toe";
+
+const HTMLbutton = document.body.appendChild(startButton);
+
+startButton.addEventListener("click", main);
