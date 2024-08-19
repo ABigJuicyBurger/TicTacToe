@@ -28,6 +28,14 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.game-board::before {
+    background-color: red;
+}
+
+.game-board::after {
+    background-color: blue;
+}
+
 .cell {
     background: none;
     border: none;
@@ -51,5 +59,4 @@ Custom fonts: Choose a handwritten or chalk-like font for X's and O's.
 Color palette: Use muted, earthy tones to mimic aged paper or chalk.
 Button styling: Remove default button appearance, make them blend with the background.
 Hover effects: Add subtle changes when hovering over cells, like a faint glow.
-Markers: Style X's and O's to look hand-drawn or chalk-like.
 */
