@@ -172,8 +172,22 @@ function gameController(player1, player2) {
   };
 }
 
+
+// if there was a game, replay and reset webpage
+function resetGame() {
+  const existingBoard = document.querySelector(".game-board");
+  const gameWinner = document.querySelector(".game-winner");
+  if (existingBoard) {
+    existingBoard.remove();
+    gameWinner.remove();
+
+
+  }
+}
+
 // Function to start the game and run logic
 function main() {
+  resetGame();
   const player1 = Player();
   if (player1 === null) {
     console.log("Game cancelled");
