@@ -74,8 +74,7 @@ body {
 .game-board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  width: 300px;
-  gap: 20px;
+  width: 380px;
   margin: auto;
   height: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -104,10 +103,39 @@ body {
   color: #333;
   cursor: pointer;
   box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.05);
+  padding: 20px;
 }
 
 .cell:focus {
   outline: none;
+}
+
+/* left hand cells */
+[data-index="0"],
+[data-index="3"],
+[data-index="6"] {
+    border-right: 2px solid white;
+}
+
+/* right hand cells */
+[data-index="2"],
+[data-index="5"],
+[data-index="8"] {
+    border-left: 2px solid white;
+}
+
+/* top row cells */
+[data-index="0"],
+[data-index="1"],
+[data-index="2"] {
+    border-bottom: 2px solid white;
+}
+
+/* bottom row cells */
+[data-index="6"],
+[data-index="7"],
+[data-index="8"] {
+    border-top: 2px solid white;
 }
 
 .game-winner {
@@ -117,7 +145,6 @@ body {
 
 /* TODO: Background texture: Use a paper or chalkboard texture for the game board.
 Hand-drawn lines: Create grid lines that look sketched or chalky.
-Custom fonts: Choose a handwritten or chalk-like font for X's and O's.
 Color palette: Use muted, earthy tones to mimic aged paper or chalk.
 Button styling: Remove default button appearance, make them blend with the background.
 Hover effects: Add subtle changes when hovering over cells, like a faint glow.
