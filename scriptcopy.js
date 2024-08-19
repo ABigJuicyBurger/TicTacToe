@@ -143,8 +143,17 @@ function gameController(player1, player2) {
             display.showBoard();
           }
           const winner = gameBoard.checkWinner();
-          if (winner) {
+          if (winner === "winner") {
             console.log(`${currentPlayer.name} wins!`);
+            const gameWinner = document.createElement("div");
+            gameWinner.textContent = `${currentPlayer.name} wins!`;
+            document.body.appendChild(gameWinner);
+            // stop game
+          } else if (winner === "tie") {
+            console.log("It's a tie!");
+            const gameWinner = document.createElement("div");
+            gameWinner.textContent = "It's a tie!";
+            document.body.appendChild(gameWinner);
             // stop game
           } else {
             switchPlayer();
