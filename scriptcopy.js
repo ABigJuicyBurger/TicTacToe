@@ -216,8 +216,7 @@ function main() {
 const displayBoard = (board) => {
   const grid = document.createElement("div");
   grid.classList.add("game-board");
-  grid.style.cssText =
-    "display:grid, grid-template-columns: repeat(3, 1fr); width: 300px";
+  grid.style.cssText = "width: 300px";
 
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement("button");
