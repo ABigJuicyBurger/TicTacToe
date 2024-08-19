@@ -18,6 +18,37 @@ body {
   padding: 0;
 }
 
+@keyframes drawLine {
+  0% {
+    background-position: 25% 40%;
+  }
+  14% {
+    background-position: 25% 100%;
+  }
+  28% {
+    background-position: 39% 40%;
+  }
+  42% {
+    background-position: 39% 100%;
+  }
+  56% {background-position: 14% 60%;
+  }
+  70% {
+    background-position: 51% 60%;
+  }
+  84% {
+    background-position: 14% 80%;
+  }
+  96% {
+    background-position: 65% 80%;
+    opacity: 1;
+  }
+  100% {
+    background-position: 65% 80%;
+    opacity: 0;
+  }
+}
+
 .game-board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -28,27 +59,35 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.game-board::before {
-    background-color: red;
-}
-
 .game-board::after {
-    background-color: blue;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("HandwritingWithChalk.gif");
+  background-size: 30% 30%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 1;
+  animation: drawLine 3s linear forwards;
+
 }
 
 .cell {
-    background: none;
-    border: none;
-    font-size: 2em;
-    color: #333;
-    cursor: pointer;
-    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.05);
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #333;
+  cursor: pointer;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.05);
 }
 
 .cell:focus {
-    outline: none;
+  outline: none;
 }
-  
+
 .game-winner {
   text-align: center;
 }
