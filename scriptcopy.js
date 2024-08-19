@@ -146,6 +146,7 @@ function gameController(player1, player2) {
           if (winner === "winner") {
             console.log(`${currentPlayer.name} wins!`);
             const gameWinner = document.createElement("div");
+            gameWinner.className = "game-winner";
             gameWinner.textContent = `${currentPlayer.name} wins!`;
             document.body.appendChild(gameWinner);
             // stop game
