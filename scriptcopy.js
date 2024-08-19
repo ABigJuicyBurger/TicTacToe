@@ -246,8 +246,8 @@ const displayBoard = (board) => {
 };
 
 const startButton = document.createElement("button");
+startButton.className = "start-button";
 
-startButton.style.cssText = "background-color: forestgreen";
 startButton.textContent = "Start Tic_Tac_Toe";
 
 const HTMLbutton = document.body.appendChild(startButton);
