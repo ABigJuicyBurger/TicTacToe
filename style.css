@@ -73,6 +73,17 @@ body {
   }
 }
 
+@keyframes lineAppear {
+  0% {
+    opacity: 0;
+    width: 10%;
+  }
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}
+
 .game-board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -120,6 +131,7 @@ body {
     rgba(255, 255, 255, 0.2)
   );
   filter: blur(1px);
+  animation: lineAppear 3s linear forwards;
 }
 
 .cell:nth-child(3n-1)::before {
@@ -139,6 +151,14 @@ body {
 .cell:focus {
   outline: none;
 }
+
+.cell[data-index]::before,
+.cell[data-index]::after {
+    content: "";
+    position: absolute;
+    animation: lineAppear 3s linease forwards;
+}
+
 
 /* left hand cells */
 [data-index="0"],
